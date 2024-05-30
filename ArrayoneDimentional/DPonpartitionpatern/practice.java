@@ -1,32 +1,35 @@
+import java.util.*;
 public class practice {
-    public static int f(int num1,int num2){
-        String s1=Integer.toString(num1);
-        String s2=Integer.toString(num2);
-        int count=0;
-        int i=0;
-        int j=0;
-        while(i<s1.length()&&j<s2.length()){
-            if(s1.charAt(i)==s2.charAt(j)){
-                count++;
-                i++;
-                j++;
-            }else{
-                return count;
-            }
+    public static boolean isSequence(String prev,String curr){
+        if(prev.length()==curr.length()) return false;
+        Set<Character> st=new HashSet<>();
+        for(int i=0;i<curr.length();i++){
+            st.add(curr.charAt(i));
         }
-        return count;
+        for(int i=0;i<prev.length();i++){
+            if(st.contains(prev.charAt(i))) st.remove(prev.charAt(i));
+        }
+        return st.size()==1;
+    }
+    public static int f(String str[],int curr,int prev){
+        if(curr==str.length) return 0;
+        int pick=Integer.MIN_VALUE;
+        if(prev==-1||isSequence(str[prev],str[curr])){
+            pick=1+f(str,curr+1,curr);
+        }
+        int notpick=f(str,curr+1,prev);
+        return Math.max(pick,notpick);
     }
     public static void main(String[] args) {
-        int arr1[]={1,10,100};
-        int arr2[]={1000};
-        int max=0;
-        for(int i=0;i<arr1.length;i++){
-            for(int j=0;j<arr2.length;j++){
-                max=Math.max(max,f(arr1[i],arr2[j]));
+       String str[]={"a","b","bdca","bca","bda"};
+       Comparator<String> com=new Comparator<String>() { // aninimus class
+            public int compare(String str1,String str2){ // sort on basic of bubble sort
+               if(str1.length()>str2.length()) return 1;
+               return -1;
             }
-        }
-        String s="j";
-        s.substring(0,s.length()-1);
-        System.out.println(max);
+        };
+       Arrays.sort(str,com);
+       System.out.println(f(str,0,-1));
+
     }
 }

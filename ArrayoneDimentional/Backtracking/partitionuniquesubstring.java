@@ -1,19 +1,25 @@
 import java.util.*;
 public class partitionuniquesubstring {
-    public static int f(int idx,List<String> arr,String str){
-        if(idx==str.length()) return 0;
-        int max=Integer.MIN_VALUE;
-        for(int i=idx;i<str.length();i++){
-            String s=str.substring(idx,i+1);
-            if(!arr.contains(s)){
-                arr.add(s);
-                int ans=1+f(i+1,arr,str);
-                max=Math.max(max,ans);
-            }
+    public static boolean palindrom(String str,int x,int y){
+        while(x<y){
+            if(str.charAt(x)!=str.charAt(y)) return false;
+            x++;
+            y--;
         }
-        return max;
+        return true;
+    }
+    public static void f(String str,int i,List<String> ans){
+        for(int x=i;x<str.length();x++){
+            if(palindrom(str,x,i)){
+                ans.add(str.substring(i,x+1));
+            }
+            f(str,x+1,ans);
+        }
     }
     public static void main(String[] args) {
-        System.out.println(f(0,new ArrayList<>(),"aba"));
+       String str="aabaacd";
+       List<String> ans=new ArrayList<>();
+       f(str,0,ans);
+       System.out.println(ans);
     }
 }
